@@ -1,5 +1,6 @@
 from .r_type import convert_r_type
 from .i_type import convert_i_type
+from .s_type import convert_s_type
 
 # Define funct3 and opcode mappings for all instruction types
 func3 = {"R-Type": {"add": "000", "sub": "000", "slt": "010", "srl": "101", "or": "110", "and": "111"},
@@ -83,24 +84,6 @@ def validate_instruction(op, parts):
     except ValueError:
         raise ValueError(f"Invalid immediate value in {op} instruction")
 
-
-def convert_i_type(op, parts):
-    rd = registers[parts[1]]
-    rs1 = registers[parts[2]]
-    imm = int(parts[3])
-    imm_val = int_to_bin(imm, 12)
-    funct3_val = func3["I-Type"][op]
-    op_val = opcode["I-Type"][op]
-    return f"{imm_val}{rs1}{funct3_val}{rd}{op_val}"
-
-def convert_s_type(op, parts):
-    rs2 = registers[parts[1]]
-    imm = int(parts[2])
-    rs1 = registers[parts[3]]
-    imm_val = int_to_bin(imm, 12)
-    funct3_val = func3["S-Type"][op]
-    op_val = opcode["S-Type"][op]
-    return f"{imm_val[:7]}{rs2}{rs1}{funct3_val}{imm_val[7:]}{op_val}"
 
 def convert_b_type(op, parts, current_address, labels):
     rs1 = registers[parts[1]]
