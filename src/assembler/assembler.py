@@ -1,4 +1,5 @@
 from .r_type import convert_r_type
+from .i_type import convert_i_type
 
 # Define funct3 and opcode mappings for all instruction types
 func3 = {"R-Type": {"add": "000", "sub": "000", "slt": "010", "srl": "101", "or": "110", "and": "111"},
