@@ -1,6 +1,7 @@
 from .r_type import convert_r_type
 from .i_type import convert_i_type
 from .s_type import convert_s_type
+from .b_type import convert_b_type
 
 # Define funct3 and opcode mappings for all instruction types
 func3 = {"R-Type": {"add": "000", "sub": "000", "slt": "010", "srl": "101", "or": "110", "and": "111"},
@@ -84,32 +85,6 @@ def validate_instruction(op, parts):
     except ValueError:
         raise ValueError(f"Invalid immediate value in {op} instruction")
 
-
-def convert_b_type(op, parts, current_address, labels):
-    rs1 = registers[parts[1]]
-    rs2 = registers[parts[2]]
-    target = parts[3]
-    
-    # Handle label or immediate
-    if target.isdigit() or (target[0] == '-' and target[1:].isdigit()):
-        offset = int(target) * 2  # Convert immediate to byte offset
-    else:
-        if target not in labels:
-            return None  # Skip this instruction for now
-        offset = (labels[target] - current_address)
-    
-    imm = offset // 2
-    imm_bin = int_to_bin(imm, 13)
-    funct3_val = func3["B-Type"][op]
-    op_val = opcode["B-Type"][op]
-    
-    # Rearrange immediate bits for B-type format
-    imm_12 = imm_bin[0]
-    imm_11 = imm_bin[1]
-    imm_10_5 = imm_bin[2:8]
-    imm_4_1 = imm_bin[8:12]
-    
-    return f"{imm_12}{imm_10_5}{rs2}{rs1}{funct3_val}{imm_4_1}{imm_11}{op_val}"
 
 def convert_j_type(op, parts, current_address, labels):
     rd = registers[parts[1]]
